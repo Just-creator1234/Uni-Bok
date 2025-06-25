@@ -93,7 +93,7 @@ export async function POST(request) {
       );
     }
 
-    const adminEmails = ["jackright198765@gmail.com"];
+    const adminEmails = ["jackright198765@gmail.com","darlingtonboateng18@gmail.com"];
     const isAdmin = adminEmails.includes(email.toLowerCase());
 
     // 5. Create account
