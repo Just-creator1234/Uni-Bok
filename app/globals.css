@@ -48,7 +48,7 @@
   /* Animations */
   --animation-glow: glow 2.5s ease-in-out infinite;
 
-   --breakpoint-2xl: 320;
+  --breakpoint-2xl: 320;
 }
 
 @keyframes glow {
@@ -135,3 +135,6 @@ a:hover {
 .fade-in-right {
   animation: fade-in-right 0.8s ease-out forwards;
 }
+
+
+    /* @custom-variant dark (&:where(.dark, .dark *)); */

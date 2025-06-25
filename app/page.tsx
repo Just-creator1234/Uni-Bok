@@ -43,17 +43,20 @@ export default function Home() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
         >
-          Welcome to Uni<span className="text-blue-900">-Bok</span>
+          Welcome to Uni-Bok
         </motion.h1>
 
         <motion.p
-          className="text-gray-600  mx-auto mb-6"
+          className="text-gray-600  mx-auto mb-6 w-4xl"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
         >
-          Your ultimate learning companion. Access course materials, simplify
-          your study routine, and grow academically with AI-powered assistance.
+          {" "}
+          A project intiated by Darligton Boateng Oppong, who has not paid me ,
+          By the Department of Molecular Biology and Biotechnology. Your
+          ultimate learning companion. Access course materials, simplify your
+          study routine.
         </motion.p>
 
         <motion.div
@@ -65,7 +68,7 @@ export default function Home() {
             href="/signup"
             className="inline-block border-2 border-accent text-white font-semibold px-6 py-3 rounded-lg transition"
           >
-           Get Started
+            Get Started
           </Link>
         </motion.div>
       </motion.div>
