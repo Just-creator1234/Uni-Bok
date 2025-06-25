@@ -112,7 +112,7 @@ export default function Navbar() {
     <header className="w-full bg-white shadow-sm">
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-20">
         {/* Logo */}
-        <Link href="/Allcourse" className="flex items-center gap-2">
+        <Link href="/" className="flex items-center gap-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="w-8 h-8 sm:w-10 sm:h-10 text-blue-600"
