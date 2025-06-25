@@ -53,9 +53,9 @@ export default function Home() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
         >
-          A project by Darlington Boateng Oppong, unpaid as of today, by the
-          Department of Molecular Biology and Biotechnology. Your ultimate
-          learning companion.
+          A project by Darlington Boateng Oppong,who has not paid me as of
+          today, by the Department of Molecular Biology and Biotechnology. Your
+          ultimate learning companion.
         </motion.p>
 
         <motion.div
