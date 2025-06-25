@@ -2,8 +2,11 @@ import "./globals.css";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Your App",
-  description: "Your app description",
+  title: "Uni-Bok",
+  description: "By the Department of Molecular Biology and Biotechnology",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
