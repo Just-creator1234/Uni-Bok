@@ -1,0 +1,133 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+ // directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String?
+  email     String   @unique
+  password  String?
+  role      Role     @default(STUDENT)
+  image                       String? 
+  level     String?
+  semester  String?
+  indexNo   String?    
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  hasRegistered Boolean @default(false)
+   hasCompletedQuestionnaire Boolean @default(false)
+  courses   Course[]  @relation("UserCourses")
+   verificationToken       String?
+  accounts                Account[]
+  emailVerified           DateTime?
+  verificationTokenExpiry DateTime?
+  PasswordResetToken      PasswordResetToken[]
+  sessions                Session[]
+}
+
+enum Role {
+  STUDENT
+  ADMIN
+}
+
+model Course {
+  id        String   @id @default(cuid())
+  code      String   @unique
+  title     String
+  slug      String   @unique
+  level     String
+  semester  String
+  users     User[]   @relation("UserCourses")
+  topics    Topic[]
+}
+
+model Topic {
+  id          Int       @id @default(autoincrement())
+  title       String
+  description String?
+  courseId    String
+  course      Course    @relation(fields: [courseId], references: [id])
+  contents    Content[]
+  createdAt   DateTime     @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Content {
+  id          Int          @id @default(autoincrement())
+  topicId     Int
+  topic       Topic        @relation(fields: [topicId], references: [id])
+  type        ContentType
+  title       String
+  description String?
+  fileUrl     String
+  format      String? 
+  createdAt   DateTime     @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum ContentType {
+  SLIDES
+  QUIZ
+  ASSIGNMENT
+  PAST_QUESTION
+}
+
+
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  expires   DateTime
+  createdAt DateTime @default(now())
+
+  @@index([token])
+}
