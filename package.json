@@ -4,11 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-"build": "set NODE_ENV=production && prisma generate && next build",
-
+    "build": "set NODE_ENV=production && prisma generate && next build",
     "start": "next start",
     "lint": "next lint"
-  
   },
   "dependencies": {
     "@faker-js/faker": "^9.8.0",

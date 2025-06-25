@@ -5,16 +5,16 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <main className="min-h-screen flex items-center justify-center bg-secondary px-6">
+    <main className="min-h-screen flex items-center justify-center bg-secondary px-4 sm:px-6">
       <motion.div
-        className="text-center"
+        className="text-center "
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
         <motion.svg
           xmlns="http://www.w3.org/2000/svg"
-          className="mx-auto mb-6 w-14 h-14 text-blue-600"
+          className="mx-auto mb-6 w-12 h-12 sm:w-14 sm:h-14 text-blue-600"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -24,6 +24,7 @@ export default function Home() {
           animate={{ rotate: 360 }}
           transition={{ repeat: Infinity, duration: 12, ease: "linear" }}
         >
+          {/* SVG paths */}
           <path d="m10 16 1.5 1.5" />
           <path d="m14 8-1.5-1.5" />
           <path d="M15 2c-1.798 1.998-2.518 3.995-2.807 5.993" />
@@ -38,7 +39,7 @@ export default function Home() {
         </motion.svg>
 
         <motion.h1
-          className="text-4xl font-semibold text-blue-700 mb-2"
+          className="text-2xl sm:text-4xl font-semibold text-blue-700 mb-3"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
@@ -47,16 +48,14 @@ export default function Home() {
         </motion.h1>
 
         <motion.p
-          className="text-gray-600  mx-auto mb-6 w-4xl"
+          className="text-sm sm:text-base text-gray-700 mx-auto mb-6 px-2"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
         >
-          {" "}
-          A project intiated by Darligton Boateng Oppong, who has not paid me ,
-          By the Department of Molecular Biology and Biotechnology. Your
-          ultimate learning companion. Access course materials, simplify your
-          study routine.
+          A project by Darlington Boateng Oppong, unpaid as of today, by the
+          Department of Molecular Biology and Biotechnology. Your ultimate
+          learning companion.
         </motion.p>
 
         <motion.div
@@ -66,7 +65,7 @@ export default function Home() {
         >
           <Link
             href="/signup"
-            className="inline-block border-2 border-accent text-white font-semibold px-6 py-3 rounded-lg transition"
+            className="inline-block border-2 border-accent  text-secondary font-semibold px-6 py-3 rounded-lg transition "
           >
             Get Started
           </Link>
