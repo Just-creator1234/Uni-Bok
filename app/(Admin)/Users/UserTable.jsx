@@ -20,6 +20,7 @@ export default function UserTable({ users }) {
     indexNo: "",
     level: "",
     semester: "",
+    role: "STUDENT",
   });
 
   const handleEditChange = (e) => {
@@ -224,6 +225,7 @@ export default function UserTable({ users }) {
                         indexNo: user.indexNo || "",
                         level: user.level || "",
                         semester: user.semester || "",
+                        role: user.role || "",
                       });
                     }}
                     className="text-yellow-600 hover:underline text-xs"
@@ -313,6 +315,15 @@ export default function UserTable({ users }) {
                 <option value="">Select Semester</option>
                 <option value="First">First</option>
                 <option value="Second">Second</option>
+              </select>
+              <select
+                name="role"
+                value={editForm.role}
+                onChange={handleEditChange}
+                className="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="STUDENT">Student</option>
+                <option value="ADMIN">Admin</option>
               </select>
             </div>
             <div className="mt-6 flex justify-end gap-3">

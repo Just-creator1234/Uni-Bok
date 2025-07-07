@@ -62,6 +62,7 @@ export async function updateUserProfile(id, data) {
       indexNo: data.indexNo,
       level: data.level,
       semester: data.semester,
+      role: data.role,
       courses: {
         set: matchedCourses.map((course) => ({ id: course.id })),
       },
