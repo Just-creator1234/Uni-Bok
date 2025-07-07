@@ -99,7 +99,7 @@ export async function POST(request) {
     // 5. Create account
     const hashedPassword = await bcrypt.hash(password, 12);
     const verificationToken = uuidv4();
-    const tokenExpires = addHours(new Date(), 1);
+    const tokenExpires = addHours(new Date(), 2);
 
     const user = await prisma.user.create({
       data: {
