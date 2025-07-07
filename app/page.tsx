@@ -48,14 +48,13 @@ export default function Home() {
         </motion.h1>
 
         <motion.p
-          className="text-sm sm:text-base text-gray-700 mx-auto mb-6 px-2"
+          className="text-sm sm:text-base text-gray-700 mx-auto mb-6 px-2 max-w-3xl"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
         >
-          A project by Darlington Boateng Oppong,who has not paid me as of
-          today, by the Department of Molecular Biology and Biotechnology. Your
-          ultimate learning companion.
+          A project by Darlington Boateng Oppong.Your ultimate learning
+          companion. For Department of Molecular Biology and Biotechnology.
         </motion.p>
 
         <motion.div
@@ -65,7 +64,7 @@ export default function Home() {
         >
           <Link
             href="/signup"
-            className="inline-block border-2 border-accent  text-secondary font-semibold px-6 py-3 rounded-lg transition "
+            className="inline-block border-2 border-accent   mt-10 text-secondary font-semibold px-6 py-3 rounded-lg transition "
           >
             Get Started
           </Link>

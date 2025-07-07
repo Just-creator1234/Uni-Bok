@@ -11,7 +11,6 @@ export default async function AdminUsersPage() {
     redirect("/AllCourse");
   }
   const users = await prisma.user.findMany({
-    where: { role: "STUDENT" },
     orderBy: { createdAt: "desc" },
   });
 

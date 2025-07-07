@@ -14,6 +14,7 @@ export default function UserTable({ users }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterLevel, setFilterLevel] = useState("");
   const [filterSemester, setFilterSemester] = useState("");
+  const [filterRole, setFilterRole] = useState("");
   const [editUser, setEditUser] = useState(null);
   const [editForm, setEditForm] = useState({
     name: "",
@@ -37,6 +38,7 @@ export default function UserTable({ users }) {
   };
   const filteredUsers = users.filter((user) => {
     const query = searchTerm.toLowerCase();
+
     const matchesSearch =
       user.name?.toLowerCase().includes(query) ||
       user.email?.toLowerCase().includes(query) ||
@@ -51,8 +53,14 @@ export default function UserTable({ users }) {
         ? true
         : String(user.hasRegistered) === filterRegistered;
 
+    const matchesRole = filterRole === "" ? true : user.role === filterRole;
+
     return (
-      matchesSearch && matchesLevel && matchesSemester && matchesRegistered
+      matchesSearch &&
+      matchesLevel &&
+      matchesSemester &&
+      matchesRegistered &&
+      matchesRole
     );
   });
 
@@ -156,6 +164,16 @@ export default function UserTable({ users }) {
           <option value="">All Students</option>
           <option value="true">Registered with University</option>
           <option value="false">Not Registered</option>
+        </select>
+
+        <select
+          value={filterRole}
+          onChange={(e) => setFilterRole(e.target.value)}
+          className="border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+        >
+          <option value="">All Roles</option>
+          <option value="STUDENT">Students</option>
+          <option value="ADMIN">Admins</option>
         </select>
       </div>
 
