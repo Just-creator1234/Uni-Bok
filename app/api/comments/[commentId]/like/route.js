@@ -42,14 +42,6 @@ export async function POST(request, { params }) {
       },
     });
 
-    // Convert BigInt to String
-    const commentWithStrings = {
-      ...updatedComment,
-      id: updatedComment.id.toString(),
-      authorId: updatedComment.authorId.toString(),
-      postId: updatedComment.postId.toString(),
-      parentId: updatedComment.parentId ? updatedComment.parentId.toString() : null,
-    };
 
     return NextResponse.json({
       success: true,

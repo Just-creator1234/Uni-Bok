@@ -60,7 +60,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { deleteMaterial } from "@/action/editMaterials";
+import { deleteMaterial } from "@/app/actions/editMaterials";
 
 export default function DeleteButton({ id }) {
   const [showConfirm, setShowConfirm] = useState(false);

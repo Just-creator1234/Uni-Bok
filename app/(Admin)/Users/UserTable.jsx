@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import UserInsights from "./UserInsights";
 import * as XLSX from "xlsx";
-import { deleteStudent, updateUserProfile } from "@/action/editUser";
+import { deleteStudent, updateUserProfile } from "@/app/actions/editUser";
 
 export default function UserTable({ users }) {
   const [filterRegistered, setFilterRegistered] = useState("");
