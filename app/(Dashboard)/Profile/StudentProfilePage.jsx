@@ -1,7 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { updateStudentProfile, deleteStudentAccount } from "@/action/editUser";
+import {
+  updateStudentProfile,
+  deleteStudentAccount,
+} from "@/app/actions/editUser";
 
 import { ChevronDown, ChevronUp } from "lucide-react";
 

@@ -5,14 +5,12 @@ import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
-export async function updateUser(data) {
-  const session = await getServerSession(authOptions);
+export async function updateUser(data, userId) {
+  // No need for session validation since we have the userId directly
   const level = data.get("level");
   const semester = data.get("semester");
   const indexNo = data.get("indexNo");
   const hasRegistered = data.get("hasRegistered") === "true";
-
-  const userId = session.user.id;
 
   const registeredUser = await prisma.user.update({
     where: { id: userId },
@@ -21,7 +19,6 @@ export async function updateUser(data) {
       semester,
       indexNo,
       hasRegistered,
-      hasCompletedQuestionnaire: true,
     },
   });
 
@@ -42,6 +39,8 @@ export async function updateUser(data) {
       },
     },
   });
+
+  return { success: true };
 }
 
 export async function getCourses() {
@@ -94,17 +93,14 @@ export async function getTopics(courseId) {
 export async function getUser() {
   const session = await getServerSession(authOptions);
 
-  
   if (!session || !session.user?.id) {
-    return null; 
+    return null;
   }
 
- 
   const userId = session.user.id;
 
   const user = await prisma.user.findUnique({
     where: { id: userId },
-    select: { hasCompletedQuestionnaire: true },
   });
 
   return user;

@@ -24,10 +24,13 @@ export default function VerifyEmailPage() {
           body: JSON.stringify({ token }),
         });
 
+        // In your verify page component
         if (res.ok) {
-          setMessage("✅ Email verified! Redirecting to login...");
+          const data = await res.json();
+          setMessage("✅ Email verified! Redirecting to questionnaire...");
           setTimeout(() => {
-            router.push("/signin?verified=true");
+            // Pass the userId to the questionnaire page
+            router.push(`/questionnaire?userId=${data.userId}`);
           }, 2500);
         } else {
           const data = await res.json();

@@ -1,3 +1,4 @@
+// app/api/auth/verify/route.js
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
@@ -29,7 +30,9 @@ export async function POST(request) {
       });
 
       if (user && !user.emailVerified) {
-        await prisma.user.delete({ where: { email: existingToken.identifier } });
+        await prisma.user.delete({
+          where: { email: existingToken.identifier },
+        });
       }
 
       await prisma.verificationToken.delete({ where: { token } });
@@ -40,15 +43,20 @@ export async function POST(request) {
       );
     }
 
-    // ✅ Mark user as verified
-    await prisma.user.update({
+    // ✅ Mark user as verified and get the user data
+    const user = await prisma.user.update({
       where: { email: existingToken.identifier },
       data: { emailVerified: new Date() },
     });
 
     await prisma.verificationToken.delete({ where: { token } });
 
-    return NextResponse.json({ success: true, message: "Email verified." });
+    // Return user ID along with success message
+    return NextResponse.json({
+      success: true,
+      message: "Email verified.",
+      userId: user.id,
+    });
   } catch (error) {
     console.error("Verification error:", error);
     return NextResponse.json(
