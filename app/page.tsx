@@ -53,8 +53,9 @@ export default function Home() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
         >
-          A project by Darlington Boateng Oppong.Your ultimate learning
-          companion. For Department of Molecular Biology and Biotechnology.
+          An initiative by the 17th administration, led by H.E Darlington O.
+          Boateng and supoorted by the HOD, Dr. Foster Kyei For the Department
+          of Molecular Biology and Biotechnology
         </motion.p>
 
         <motion.div

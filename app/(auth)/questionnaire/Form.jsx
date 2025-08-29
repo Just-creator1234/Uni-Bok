@@ -1,13 +1,14 @@
+// app/questionnaire/Form.js
 "use client";
 
 import { useState } from "react";
-import { updateUser } from "@/action/updateUser";
+import { updateUser } from "@/app/actions/updateUser";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 
-
-export default function Questionnaire() {
+export default function Questionnaire({ userId }) {
   const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [form, setForm] = useState({
     level: "",
@@ -26,6 +27,7 @@ export default function Questionnaire() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     const data = new FormData();
     data.append("level", form.level);
@@ -34,9 +36,15 @@ export default function Questionnaire() {
     data.append("hasRegistered", form.hasRegistered ? "true" : "false");
 
     try {
-      await updateUser(data);
-      router.push("/Allcourse");
-    } catch (error) {}
+      // Pass userId to the updateUser action
+      await updateUser(data, userId);
+      router.push("/signin?message=Registration completed! Please sign in.");
+    } catch (error) {
+      console.error("Error updating user:", error);
+      alert("There was an error completing your registration. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -83,6 +91,7 @@ export default function Questionnaire() {
               <label className="block mb-1 text-sm font-medium">Level</label>
               <select
                 name="level"
+                value={form.level}
                 onChange={handleChange}
                 required
                 className="w-full border border-muted rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
@@ -99,6 +108,7 @@ export default function Questionnaire() {
               <label className="block mb-1 text-sm font-medium">Semester</label>
               <select
                 name="semester"
+                value={form.semester}
                 onChange={handleChange}
                 required
                 className="w-full border border-muted rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
@@ -115,6 +125,7 @@ export default function Questionnaire() {
               </label>
               <input
                 name="indexNo"
+                value={form.indexNo}
                 placeholder="Enter your index number"
                 onChange={handleChange}
                 required
@@ -136,8 +147,12 @@ export default function Questionnaire() {
               </label>
             </div>
 
-            <button type="submit" className="btn w-full h-12 text-base">
-              Finish Registration
+            <button 
+              type="submit" 
+              disabled={isSubmitting}
+              className="btn w-full h-12 text-base disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isSubmitting ? "Processing..." : "Finish Registration"}
             </button>
           </motion.form>
         </div>

@@ -31,11 +31,7 @@ export default function SignInPage({ user }) {
     if (res?.error) {
       setError(res.error);
     } else {
-      if (!user?.hasCompletedQuestionnaire) {
-        router.push("/questionnaire");
-      } else {
-        router.push("/Allcourse");
-      }
+      router.push("/Allcourse");
     }
 
     setLoading(false);

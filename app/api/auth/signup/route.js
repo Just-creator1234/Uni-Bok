@@ -4,8 +4,9 @@ import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 import { addHours } from "date-fns";
+import { slugify } from "@/lib/utils"; // You'll need to create this utility function
 
-import { sendVerificationEmail } from "@/lib/mailer"; // Create this next
+import { sendVerificationEmail } from "@/lib/mailer";
 
 // Password requirements
 const PASSWORD_RULES = {
@@ -22,6 +23,28 @@ const PASSWORD_RULES = {
     "welcome",
   ],
 };
+
+// Function to generate a unique slug
+async function generateUniqueSlug(baseSlug, prisma) {
+  let slug = baseSlug;
+  let counter = 1;
+  let isUnique = false;
+
+  while (!isUnique) {
+    const existingUser = await prisma.user.findUnique({
+      where: { slug },
+    });
+
+    if (!existingUser) {
+      isUnique = true;
+    } else {
+      slug = `${baseSlug}-${counter}`;
+      counter++;
+    }
+  }
+
+  return slug;
+}
 
 export async function POST(request) {
   try {
@@ -96,7 +119,11 @@ export async function POST(request) {
     const adminEmails = ["jackright198765@gmail.com","darlingtonboateng18@gmail.com"];
     const isAdmin = adminEmails.includes(email.toLowerCase());
 
-    // 5. Create account
+    // 5. Generate unique slug from name
+    const baseSlug = slugify(name);
+    const uniqueSlug = await generateUniqueSlug(baseSlug, prisma);
+
+    // 6. Create account
     const hashedPassword = await bcrypt.hash(password, 12);
     const verificationToken = uuidv4();
     const tokenExpires = addHours(new Date(), 2);
@@ -106,10 +133,11 @@ export async function POST(request) {
         name: name,
         email: email.toLowerCase(),
         password: hashedPassword,
+        slug: uniqueSlug, // Add the generated slug
         emailVerified: null,
         role: isAdmin ? "ADMIN" : "STUDENT",
       },
-      select: { id: true, email: true },
+      select: { id: true, email: true, slug: true },
     });
 
     await prisma.verificationToken.create({

@@ -1,15 +1,11 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+// app/questionnaire/page.js
 import Form from "./Form";
-import { redirect } from "next/navigation";
 
-const questionnairePage = async () => {
-  const session = await getServerSession(authOptions);
+const QuestionnairePage = async ({ searchParams }) => {
+  // Get userId from query parameters
+  const userId = await searchParams.userId;
 
-  if (!session) {
-    redirect("/signin");
-  }
-  return <Form />;
+  return <Form userId={userId} />;
 };
 
-export default questionnairePage;
+export default QuestionnairePage;

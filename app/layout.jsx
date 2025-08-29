@@ -1,7 +1,10 @@
 import "./globals.css";
-import type { Metadata } from "next";
+import { Metadata } from "next";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import SessionWrapper from "@/components/SessionWrapper";
 
-export const metadata: Metadata = {
+export const metadata = {
   title: "Uni-Bok",
   description: "By the Department of Molecular Biology and Biotechnology",
   icons: {
@@ -9,18 +12,16 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function RootLayout({ children }) {
+  const session = await getServerSession(authOptions);
+
   return (
     <html lang="en" className="light" suppressHydrationWarning>
       <body
         className="__variable_5cfdac __variable_9a8899 antialiased"
         suppressHydrationWarning
       >
-        {children}
+        <SessionWrapper session={session}>{children}</SessionWrapper>
       </body>
     </html>
   );
