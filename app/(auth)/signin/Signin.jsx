@@ -6,15 +6,29 @@ import Featurelist from "../Featurelist";
 import { TypingEffect } from "../TypingEffect";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function SignInPage({ user }) {
+  const searchParams = useSearchParams();
+  const errorParam = searchParams.get("error");
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [remember, setRemember] = useState(false);
+
+  useEffect(() => {
+    if (errorParam === "OAuthAccountNotLinked") {
+      setErrorMessage(
+        "This email is already associated with another account. Please sign in using your original method."
+      );
+    } else if (errorParam === "CredentialsSignin") {
+      setErrorMessage("Invalid credentials. Please try again.");
+    }
+    // Clear the error from URL to prevent showing it on refresh
+    window.history.replaceState(null, "", window.location.pathname);
+  }, [errorParam]);
 
   async function handleSubmition(e) {
     e.preventDefault();

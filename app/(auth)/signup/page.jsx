@@ -91,7 +91,9 @@ export default function SignUpPage() {
                   <h2 className="text-3xl font-bold text-heading">
                     Create Account
                   </h2>
-                  <p className="text-sm">Join Uni-bok to access all materials</p>
+                  <p className="text-sm">
+                    Join Uni-bok to access all materials
+                  </p>
                 </div>
 
                 {error && (
@@ -107,9 +109,15 @@ export default function SignUpPage() {
 
                 <button
                   className="w-full flex items-center justify-center gap-2 bg-white border border-muted p-2 rounded-md hover:bg-muted transition"
-                  onClick={() => signIn("google")}
+                  onClick={() =>
+                    signIn("google", { callbackUrl: "/Allcourse" })
+                  }
                 >
-                  <img src="/google.svg" alt="Google icon" className="w-5 h-5" />
+                  <img
+                    src="/google.svg"
+                    alt="Google icon"
+                    className="w-5 h-5"
+                  />
                   <span className="text-sm font-medium text-heading">
                     Sign In With Google
                   </span>
@@ -120,7 +128,9 @@ export default function SignUpPage() {
                     <div className="w-full border-t border-muted-dark"></div>
                   </div>
                   <div className="relative flex justify-center text-sm">
-                    <span className="px-3 bg-white">Or continue with email</span>
+                    <span className="px-3 bg-white">
+                      Or continue with email
+                    </span>
                   </div>
                 </div>
 
@@ -177,7 +187,7 @@ export default function SignUpPage() {
                 <div className="flex justify-center">
                   <CheckCircle className="h-16 w-16 text-green-500" />
                 </div>
-                
+
                 <div className="space-y-2">
                   <h2 className="text-2xl font-bold text-heading">
                     Account Created Successfully!
@@ -186,12 +196,15 @@ export default function SignUpPage() {
                     Welcome to Uni-bok, {name}!
                   </p>
                   <p className="text-sm text-gray-600">
-                    A verification email has been sent to <strong>{email}</strong>.
+                    A verification email has been sent to{" "}
+                    <strong>{email}</strong>.
                   </p>
                 </div>
 
                 <div className="bg-blue-50 p-4 rounded-md border border-blue-200">
-                  <h3 className="font-medium text-blue-800 mb-2">What's next?</h3>
+                  <h3 className="font-medium text-blue-800 mb-2">
+                    What's next?
+                  </h3>
                   <ul className="text-sm text-blue-700 space-y-1 text-left">
                     <li>• Check your email to verify your account</li>
                     <li>• Explore your student dashboard</li>
