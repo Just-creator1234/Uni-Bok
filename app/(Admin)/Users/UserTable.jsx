@@ -258,7 +258,7 @@ export default function UserTable({ users }) {
       </div>
 
       <div className="text-sm text-gray-400 italic mb-2 block md:hidden text-center">
-        Btter viewon on Pc. Swipe left/right to see more columns →
+        Better viewon on Pc. Swipe left/right to see more columns →
       </div>
       {showConfirm && userToDelete && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">

@@ -102,16 +102,15 @@ export default function Navbar() {
           <NavLink href="/Allcourse" label="Courses" Icon={BookOpen} />
           <NavLink href="/Profile" label="Account" Icon={User} />
           <NavLink href="/articles" label="Blogs" Icon={Newspaper} />
-          <NavLink href="/Announcement" label="Announcement" Icon={Megaphone} />
+          <NavLink href="/announcement" label="Announcement" Icon={Megaphone} />
           {session?.user?.role === "ADMIN" && (
             <>
+              <NavLink href="/Uploads" label="Admin" Icon={ShieldCheck} />
               <NavLink
-                href="/Announcement"
-                label="Announcement"
+                href="/Create-Article"
+                label="Create Blogs/Announcement"
                 Icon={Feather}
               />
-
-              <NavLink href="/Uploads" label="Admin" Icon={ShieldCheck} />
             </>
           )}
           <button
