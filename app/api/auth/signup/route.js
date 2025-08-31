@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 import { addHours } from "date-fns";
-import { slugify } from "@/lib/utils"; // You'll need to create this utility function
+import { createSlug } from "@/lib/utils";
 
 import { sendVerificationEmail } from "@/lib/mailer";
 
@@ -116,11 +116,14 @@ export async function POST(request) {
       );
     }
 
-    const adminEmails = ["jackright198765@gmail.com","darlingtonboateng18@gmail.com"];
+    const adminEmails = [
+      "jackright198765@gmail.com",
+      "darlingtonboateng18@gmail.com",
+    ];
     const isAdmin = adminEmails.includes(email.toLowerCase());
 
     // 5. Generate unique slug from name
-    const baseSlug = slugify(name);
+    const baseSlug = createSlug(name);
     const uniqueSlug = await generateUniqueSlug(baseSlug, prisma);
 
     // 6. Create account
