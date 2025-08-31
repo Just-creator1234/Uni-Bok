@@ -19,6 +19,7 @@ const navItems = [
     label: "Users",
     icon: Users,
   },
+  
 ];
 
 export default function Sidebar({ onLinkClick }) {

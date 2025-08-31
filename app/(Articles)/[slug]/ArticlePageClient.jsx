@@ -19,7 +19,6 @@ import {
   Linkedin,
   Copy,
 } from "lucide-react";
-import Navbar from "@/components/Navbar";
 
 const ArticlePageClient = ({ article, relatedArticles }) => {
   const [isBookmarked, setIsBookmarked] = useState(false);
@@ -133,8 +132,6 @@ const ArticlePageClient = ({ article, relatedArticles }) => {
         />
       </Head>
 
-      <Navbar />
-
       {/* Breadcrumb */}
       <div className="max-w-4xl mx-auto px-4 py-4">
         <div className="flex items-center text-sm text-gray-500 space-x-2">
@@ -145,13 +142,7 @@ const ArticlePageClient = ({ article, relatedArticles }) => {
             Home
           </a>
           <span>/</span>
-          <a
-            href={`/category/${article.category?.toLowerCase()}`}
-            className="hover:text-[var(--color-primary)] transition-colors"
-          >
-            {article.category}
-          </a>
-          <span>/</span>
+
           <span className="text-gray-900 font-medium truncate">
             {article.title}
           </span>

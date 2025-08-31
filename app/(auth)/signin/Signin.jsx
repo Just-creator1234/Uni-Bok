@@ -17,7 +17,7 @@ export default function SignInPage({ user }) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [remember, setRemember] = useState(false);
-
+  const [errorMessage, setErrorMessage] = useState("");
   useEffect(() => {
     if (errorParam === "OAuthAccountNotLinked") {
       setErrorMessage(
@@ -98,6 +98,15 @@ export default function SignInPage({ user }) {
             <p className="w-full rounded-md bg-red-100 text-red-700 text-center p-2 text-sm">
               {error}
             </p>
+          )}
+
+          {error === "OAuthAccountNotLinked" && (
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+              <p className="text-yellow-800">
+                Google account not linked. Please sign in with your email and
+                password, then you can link your Google account in settings.
+              </p>
+            </div>
           )}
 
           <form onSubmit={handleSubmition} className="space-y-6">

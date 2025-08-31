@@ -15,8 +15,6 @@ import {
 export default async function AnnouncementsPage() {
   const posts = await getAnnouncementPosts();
 
-  console.log(posts, "jjjjjjjjjjjjjjjjjjj")
-
   const getTimeAgo = (dateString) => {
     if (!dateString) return "";
     const date = new Date(dateString);
