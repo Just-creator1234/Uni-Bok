@@ -6,41 +6,55 @@ import prisma from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
 export async function updateUser(data, userId) {
-  // No need for session validation since we have the userId directly
-  const level = data.get("level");
-  const semester = data.get("semester");
-  const indexNo = data.get("indexNo");
-  const hasRegistered = data.get("hasRegistered") === "true";
+  try {
+    const level = data.get("level");
+    const semester = data.get("semester");
+    const indexNo = data.get("indexNo");
+    const hasRegistered = data.get("hasRegistered") === "true";
 
-  const registeredUser = await prisma.user.update({
-    where: { id: userId },
-    data: {
-      level,
-      semester,
-      indexNo,
-      hasRegistered,
-    },
-  });
-
-  const matchingCourses = await prisma.course.findMany({
-    where: {
-      level: registeredUser.level,
-      semester: registeredUser.semester,
-    },
-  });
-
-  console.log(matchingCourses, "UserCourses");
-
-  await prisma.user.update({
-    where: { id: userId },
-    data: {
-      courses: {
-        connect: matchingCourses.map((course) => ({ id: course.id })),
+    // Update user with questionnaire data
+    const registeredUser = await prisma.user.update({
+      where: { id: userId },
+      data: {
+        level,
+        semester,
+        indexNo,
+        hasRegistered,
+        hasCompletedQuestionnaire: true, // MARK AS COMPLETED
       },
-    },
-  });
+    });
 
-  return { success: true };
+    // Connect matching courses
+    const matchingCourses = await prisma.course.findMany({
+      where: {
+        level: registeredUser.level,
+        semester: registeredUser.semester,
+      },
+    });
+
+    if (matchingCourses.length > 0) {
+      await prisma.user.update({
+        where: { id: userId },
+        data: {
+          courses: {
+            connect: matchingCourses.map((course) => ({ id: course.id })),
+          },
+        },
+      });
+    }
+
+    // Return success instead of redirecting
+    return {
+      success: true,
+      message: "User updated successfully",
+    };
+  } catch (error) {
+    console.error("Error updating user:", error);
+    return {
+      success: false,
+      error: "Failed to update user information",
+    };
+  }
 }
 
 export async function getCourses() {

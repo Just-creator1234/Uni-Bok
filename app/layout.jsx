@@ -3,6 +3,7 @@ import { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import SessionWrapper from "@/components/SessionWrapper";
+import AuthRedirect from "@/components/AuthRedirect";
 
 export const metadata = {
   title: "Uni-Bok",
@@ -21,7 +22,10 @@ export default async function RootLayout({ children }) {
         className="__variable_5cfdac __variable_9a8899 antialiased"
         suppressHydrationWarning
       >
-        <SessionWrapper session={session}>{children}</SessionWrapper>
+        <SessionWrapper session={session}>
+          <AuthRedirect />
+          {children}
+        </SessionWrapper>
       </body>
     </html>
   );

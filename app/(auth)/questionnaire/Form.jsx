@@ -5,10 +5,12 @@ import { useState } from "react";
 import { updateUser } from "@/app/actions/updateUser";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import { useSession } from "next-auth/react";
 
 export default function Questionnaire({ userId }) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { data: session, status } = useSession();
 
   const [form, setForm] = useState({
     level: "",
@@ -36,12 +38,14 @@ export default function Questionnaire({ userId }) {
     data.append("hasRegistered", form.hasRegistered ? "true" : "false");
 
     try {
-      // Pass userId to the updateUser action
-      await updateUser(data, userId);
-      router.push("/signin?message=Registration completed! Please sign in.");
+      await updateUser(data, session.user.id);
+      // Redirect to Allcourse after successful submission
+      router.push("/Allcourse");
     } catch (error) {
       console.error("Error updating user:", error);
-      alert("There was an error completing your registration. Please try again.");
+      alert(
+        "There was an error completing your registration. Please try again."
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -147,8 +151,8 @@ export default function Questionnaire({ userId }) {
               </label>
             </div>
 
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               disabled={isSubmitting}
               className="btn w-full h-12 text-base disabled:opacity-50 disabled:cursor-not-allowed"
             >
