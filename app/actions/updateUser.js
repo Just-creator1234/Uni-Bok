@@ -12,6 +12,14 @@ export async function updateUser(data, userId) {
     const indexNo = data.get("indexNo");
     const hasRegistered = data.get("hasRegistered") === "true";
 
+    // ✅ VALIDATION: Check for required fields
+    if (!level || !semester || !indexNo) {
+      return {
+        success: false,
+        error: "All fields are required: level, semester, and index number",
+      };
+    }
+
     // Update user with questionnaire data
     const registeredUser = await prisma.user.update({
       where: { id: userId },
