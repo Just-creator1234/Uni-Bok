@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import { signIn } from "next-auth/react";
 
 export default function VerifyEmailPage() {
   const params = useSearchParams();
@@ -28,10 +29,24 @@ export default function VerifyEmailPage() {
         if (res.ok) {
           const data = await res.json();
           setMessage("✅ Email verified! Redirecting to questionnaire...");
-          setTimeout(() => {
-            // Pass the userId to the questionnaire page
-            router.push(`/questionnaire?userId=${data.userId}`);
-          }, 2500);
+          // AUTOMATICALLY SIGN IN THE USER AFTER VERIFICATION
+          const signInResult = await signIn("credentials", {
+            email: data.email,
+            password: "", // You might need to handle this differently
+            redirect: false,
+          });
+
+          if (signInResult?.ok) {
+            // Redirect to questionnaire after successful sign-in
+            setTimeout(() => {
+              router.push("/questionnaire");
+            }, 1500);
+          } else {
+            // If auto sign-in fails, still redirect to signin page
+            setTimeout(() => {
+              router.push("/signin?message=Email verified! Please sign in.");
+            }, 1500);
+          }
         } else {
           const data = await res.json();
           setMessage(`❌ ${data.error || "Verification failed."}`);
