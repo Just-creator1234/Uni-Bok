@@ -21,7 +21,7 @@ model User {
   createdAt                 DateTime             @default(now())
   updatedAt                 DateTime             @updatedAt
   hasRegistered             Boolean              @default(false)
-   hasCompletedQuestionnaire Boolean              @default(false)
+   hasCompletedQuestionnaire Boolean?              @default(false)
 slug String? @unique 
   verificationToken         String?
   emailVerified             DateTime?
