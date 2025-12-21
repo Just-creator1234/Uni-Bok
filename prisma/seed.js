@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { seedCategories } from "./categorySeed.js";
 import { seedCourses } from "./courseSeed.js";
 
-// 👇 Example data imports (adjust paths/structure)
+
 import { categories } from "./categoryData.js";
 import { courses } from "./courseData.js";
 
