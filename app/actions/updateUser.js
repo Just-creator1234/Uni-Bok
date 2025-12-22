@@ -146,18 +146,13 @@ export async function getCourses() {
   const user = await prisma.user.findUnique({
     where: { id: userId },
     select: {
-      hasCompletedQuestionnaire: true,
       level: true,
       semester: true,
     },
   });
 
-  if (
-    !user ||
-    !user.hasCompletedQuestionnaire ||
-    !user.level ||
-    !user.semester
-  ) {
+  // SIMPLIFIED: Only check if level and semester exist
+  if (!user || !user.level || !user.semester) {
     return [];
   }
 
@@ -179,8 +174,6 @@ export async function getCourses() {
       code: "asc",
     },
   });
-
-  console.log(courses, "Courses for user level/semester");
 
   return courses;
 }

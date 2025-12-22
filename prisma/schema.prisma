@@ -24,7 +24,7 @@ model User {
    hasCompletedQuestionnaire Boolean?              @default(false)
 slug String? @unique 
   verificationToken         String?
-  emailVerified             DateTime?
+  emailVerified             Boolean?      @default(false)         
   verificationTokenExpiry   DateTime?
   accounts                  Account[]
   comments                  Comment[]
