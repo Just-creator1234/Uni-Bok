@@ -1,48 +1,3 @@
-// import prisma from "@/lib/prisma";
-// import { getServerSession } from "next-auth";
-// import { authOptions } from "@/lib/auth";
-// import StudentProfilePage from "./StudentProfilePage";
-// import { redirect } from "next/navigation";
-
-// export default async function ProfilePage() {
-//   const session = await getServerSession(authOptions);
-
-//   if (!session) {
-//     redirect("/signin");
-//   }
-
-//   const student = await prisma.user.findUnique({
-//     where: { id: session.user.id },
-//     select: {
-//       id: true,
-//       name: true,
-//       email: true,
-//       level: true,
-//       semester: true,
-//       indexNo: true,
-//     },
-//   });
-
-//   const courses = await prisma.course.findMany({
-//     where: {
-//       level: student.level,
-//       semester: student.semester,
-//     },
-//     include: {
-//       topics: {
-//         include: {
-//           contents: true,
-//         },
-//         orderBy: { createdAt: "asc" },
-//       },
-//     },
-//     orderBy: { code: "asc" },
-//   });
-
-//   return <StudentProfilePage student={student} courses={courses} />;
-// }
-
-
 // app/(Dashboard)/Profile/page.jsx
 "use client";
 
@@ -76,6 +31,7 @@ export default function ProfilePage() {
     name: "",
     level: "",
     semester: "",
+    indexNo: "", // ADDED
   });
 
   // Redirect if not authenticated
@@ -104,6 +60,7 @@ export default function ProfilePage() {
           name: profileData.name || "",
           level: profileData.level || "",
           semester: profileData.semester || "",
+          indexNo: profileData.indexNo || "", // ADDED
         });
       }
 
@@ -141,6 +98,7 @@ export default function ProfilePage() {
           name: form.name.trim(),
           level: form.level,
           semester: form.semester,
+          indexNo: form.indexNo.trim(),
         }),
       });
 
@@ -234,6 +192,19 @@ export default function ProfilePage() {
                     onChange={handleChange}
                     className="w-full border-2 border-gray-200 px-4 py-3 rounded-xl text-gray-800 focus:border-blue-500 focus:ring-0 transition-colors"
                     placeholder="Enter your full name"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Index Number
+                  </label>
+                  <input
+                    name="indexNo"
+                    value={form.indexNo}
+                    onChange={handleChange}
+                    className="w-full border-2 border-gray-200 px-4 py-3 rounded-xl text-gray-800 focus:border-blue-500 focus:ring-0 transition-colors"
+                    placeholder="Enter your index number"
                   />
                 </div>
 
@@ -458,26 +429,27 @@ export default function ProfilePage() {
                                   </p>
                                 )}
 
-                                {topic.contents && topic.contents.length > 0 && (
-                                  <div className="space-y-3">
-                                    {topic.contents.map((content) => (
-                                      <div
-                                        key={content.id}
-                                        className="flex justify-between items-center p-4 bg-gray-50 rounded-lg border border-gray-100 hover:bg-blue-50 transition-colors"
-                                      >
-                                        <span className="text-gray-800 font-semibold">
-                                          {content.title}
-                                        </span>
-                                        <a
-                                          href={`/materials/${content.id}`}
-                                          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold text-sm"
+                                {topic.contents &&
+                                  topic.contents.length > 0 && (
+                                    <div className="space-y-3">
+                                      {topic.contents.map((content) => (
+                                        <div
+                                          key={content.id}
+                                          className="flex justify-between items-center p-4 bg-gray-50 rounded-lg border border-gray-100 hover:bg-blue-50 transition-colors"
                                         >
-                                          View Material
-                                        </a>
-                                      </div>
-                                    ))}
-                                  </div>
-                                )}
+                                          <span className="text-gray-800 font-semibold">
+                                            {content.title}
+                                          </span>
+                                          <a
+                                            href={`/materials/${content.id}`}
+                                            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold text-sm"
+                                          >
+                                            View Material
+                                          </a>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  )}
                               </div>
                             ))}
                           </div>
