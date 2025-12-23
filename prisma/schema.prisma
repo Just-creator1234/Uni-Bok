@@ -21,11 +21,12 @@ model User {
   createdAt                 DateTime             @default(now())
   updatedAt                 DateTime             @updatedAt
   hasRegistered             Boolean              @default(false)
-   hasCompletedQuestionnaire Boolean?              @default(false)
-slug String? @unique 
+  hasCompletedQuestionnaire Boolean?             @default(false)
+  slug                      String?              @unique
   verificationToken         String?
-  emailVerified             Boolean?      @default(false)         
+  emailVerified             Boolean?             @default(false)
   verificationTokenExpiry   DateTime?
+  adminInvite               AdminInvite?
   accounts                  Account[]
   comments                  Comment[]
   PasswordResetToken        PasswordResetToken[]
@@ -125,12 +126,12 @@ model Post {
 }
 
 model Category {
-  id          String  @id @default(cuid())
-  name        String  @unique
-  slug        String  @unique
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
   description String?
-  color       String? @default("#6b7280")
-  posts       Post[]  @relation("CategoryToPost")
+  color       String?  @default("#6b7280")
+  posts       Post[]   @relation("CategoryToPost")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -143,28 +144,29 @@ model Tag {
 }
 
 model Comment {
-  id           String   @id @default(cuid())
+  id           String    @id @default(cuid())
   content      String
   authorId     String
   postId       String
   parentId     String?
-  likes        Int      @default(0)
-  isEdited     Boolean  @default(false)
+  likes        Int       @default(0)
+  isEdited     Boolean   @default(false)
   editedAt     DateTime?
-  isDeleted    Boolean  @default(false)  // Soft delete flag
-  deletedAt    DateTime?                 // When it was deleted
-  deletedBy    String?                   // Who deleted it (user ID)
-  deleteReason String?                   // Optional reason for moderation
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  author       User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  parent       Comment? @relation("CommentReplies", fields: [parentId], references: [id])
+  isDeleted    Boolean   @default(false) // Soft delete flag
+  deletedAt    DateTime? // When it was deleted
+  deletedBy    String? // Who deleted it (user ID)
+  deleteReason String? // Optional reason for moderation
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  author       User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  parent       Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
   replies      Comment[] @relation("CommentReplies")
-  post         Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  post         Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   @@index([postId])
   @@index([parentId])
 }
+
 model ReadHistory {
   id        String   @id @default(cuid())
   userId    String
@@ -224,9 +226,23 @@ model PasswordResetToken {
   @@index([token])
 }
 
+model AdminInvite {
+  id        String    @id @default(cuid())
+  email     String    @unique
+  token     String    @unique
+  invitedBy String // SUPER_ADMIN user ID
+  role      Role      @default(ADMIN)
+  expires   DateTime // 24 hours
+  createdAt DateTime  @default(now())
+  used      Boolean   @default(false)
+  usedAt    DateTime?
+  user      User?     @relation(fields: [email], references: [email])
+}
+
 enum Role {
   STUDENT
   ADMIN
+  SUPER_ADMIN
 }
 
 enum ContentType {
