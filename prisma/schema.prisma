@@ -26,7 +26,7 @@ model User {
   verificationToken         String?
   emailVerified             Boolean?             @default(false)
   verificationTokenExpiry   DateTime?
-  adminInvite               AdminInvite?
+
   accounts                  Account[]
   comments                  Comment[]
   PasswordResetToken        PasswordResetToken[]
@@ -36,6 +36,7 @@ model User {
   bookmarkedPosts           Post[]               @relation("PostBookmarks")
   likedPosts                Post[]               @relation("PostLikes")
   courses                   Course[]             @relation("UserCourses")
+    sentAdminInvites          AdminInvite[]        @relation("AdminInviteSentBy")
 }
 
 model Course {
@@ -226,18 +227,26 @@ model PasswordResetToken {
   @@index([token])
 }
 
+
+
 model AdminInvite {
   id        String    @id @default(cuid())
   email     String    @unique
   token     String    @unique
-  invitedBy String // SUPER_ADMIN user ID
+  invitedBy String    // SUPER_ADMIN user ID
   role      Role      @default(ADMIN)
-  expires   DateTime // 24 hours
+  expires   DateTime  // 24 hours
   createdAt DateTime  @default(now())
   used      Boolean   @default(false)
   usedAt    DateTime?
-  user      User?     @relation(fields: [email], references: [email])
+  
+
+  
+  // ✅ OPTIONAL: Add relation to the sender (cleaner reference)
+  invitedByUser User? @relation("AdminInviteSentBy", fields: [invitedBy], references: [id], onDelete: SetNull)
+
 }
+
 
 enum Role {
   STUDENT

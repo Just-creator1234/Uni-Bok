@@ -81,7 +81,7 @@ export async function GET() {
     }
 
     // SIMPLIFIED: Only check role, nothing else
-    const redirectTo = session.user.role === "ADMIN" 
+    const redirectTo = session.user.role === "ADMIN" && "SUPER_ADMIN"
       ? "/Uploads" 
       : "/Allcourse";
 

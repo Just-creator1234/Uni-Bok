@@ -9,10 +9,9 @@ import ClientProviders from "@/components/ClientProviders";
 export default async function AdminLayout({ children }) {
   const session = await getServerSession(authOptions);
 
-  if (!session || session.user.role !== "ADMIN") {
+  if (!session || (session.user.role !== "ADMIN" && session.user.role !== "SUPER_ADMIN")) {
     redirect("/signin");
   }
-
   return (
     <SessionWrapper session={session}>
       <div className="flex flex-col min-h-screen bg-gray-50">
