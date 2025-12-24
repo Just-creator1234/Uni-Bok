@@ -2,7 +2,7 @@
 "use server";
 
 import prisma from "@/lib/prisma";
-import { redirect } from "next/navigation";
+
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
@@ -11,6 +11,7 @@ export async function updateStudentProfile({ id, name, level, semester }) {
     throw new Error("Missing required fields");
   }
 
+  
   // Step 1: Update user basic info
   await prisma.user.update({
     where: { id },
