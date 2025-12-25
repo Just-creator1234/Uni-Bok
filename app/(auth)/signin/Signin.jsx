@@ -1,14 +1,14 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Featurelist from "../Featurelist";
 import { TypingEffect } from "../TypingEffect";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export default function SignInPage({ user }) {
+export default function SignInPage() {
   const searchParams = useSearchParams();
   const errorParam = searchParams.get("error");
   const router = useRouter();
@@ -17,38 +17,48 @@ export default function SignInPage({ user }) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [remember, setRemember] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-  useEffect(() => {
-    if (errorParam === "OAuthAccountNotLinked") {
-      setErrorMessage(
-        "This email is already associated with another account. Please sign in using your original method."
-      );
-    } else if (errorParam === "CredentialsSignin") {
-      setErrorMessage("Invalid credentials. Please try again.");
-    }
-    // Clear the error from URL to prevent showing it on refresh
-    window.history.replaceState(null, "", window.location.pathname);
-  }, [errorParam]);
 
-  async function handleSubmition(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     setLoading(true);
     setError("");
 
-    const res = await signIn("credentials", {
-      email,
-      password,
-      remember,
-      redirect: false,
-    });
+    try {
+      // 1. Sign in
+      const result = await signIn("credentials", {
+        email,
+        password,
+        remember,
+        redirect: false,
+      });
 
-    if (res?.error) {
-      setError(res.error);
-    } else {
-      router.push("/Allcourse");
+      if (result?.error) {
+        setError(result.error);
+        return;
+      }
+
+      // 2. Check user status and get redirect path
+      const statusRes = await fetch("/api/auth/status");
+
+      if (!statusRes.ok) {
+        throw new Error("Failed to check user status");
+      }
+
+      const status = await statusRes.json();
+
+      // 3. Redirect based on status
+      if (status.redirectTo) {
+        router.push(status.redirectTo);
+      } else {
+        // Fallback
+        router.push("/Allcourse");
+      }
+    } catch (error) {
+      console.error("Sign in error:", error);
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   }
 
   return (
@@ -82,34 +92,22 @@ export default function SignInPage({ user }) {
       </div>
 
       {/* RIGHT SIDE - SIGN IN FORM */}
-
       <div className="w-full bg-secondary min-h-screen flex items-center justify-center px-4">
         <motion.div
           initial={{ opacity: 0, y: 60 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="p-8 bg-white rounded-xl shadow-lg w-[25rem]  space-y-5"
+          className="p-8 bg-white rounded-xl shadow-lg w-[25rem] space-y-5"
         >
           <h2 className="text-center text-2xl font-bold text-heading">
             Welcome Back
           </h2>
-
           {error && (
             <p className="w-full rounded-md bg-red-100 text-red-700 text-center p-2 text-sm">
               {error}
             </p>
           )}
-
-          {error === "OAuthAccountNotLinked" && (
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
-              <p className="text-yellow-800">
-                Google account not linked. Please sign in with your email and
-                password, then you can link your Google account in settings.
-              </p>
-            </div>
-          )}
-
-          <form onSubmit={handleSubmition} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <input
               type="email"
               placeholder="Email"
@@ -127,14 +125,14 @@ export default function SignInPage({ user }) {
               required
             />
 
-            <div className="flex items-center justify-between text-sm text-muted-foreground max-sm:flex-col gap-3 ">
+            <div className="flex items-center justify-between text-sm text-muted-foreground max-sm:flex-col gap-3">
               <label className="flex items-center gap-2">
                 <input
                   type="checkbox"
                   id="remember"
                   checked={remember}
                   onChange={(e) => setRemember(e.target.checked)}
-                  className="accent-primary "
+                  className="accent-primary"
                 />
                 Remember Me
               </label>
@@ -157,7 +155,6 @@ export default function SignInPage({ user }) {
               {loading ? "Signing in..." : "Sign In"}
             </button>
           </form>
-
           <div className="relative my-4">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-muted"></div>
@@ -168,20 +165,32 @@ export default function SignInPage({ user }) {
               </span>
             </div>
           </div>
+
           <button
             className="w-full flex items-center justify-center gap-2 bg-white border border-muted p-2 rounded-md hover:bg-muted transition"
-            onClick={() => {
-              signIn("google");
+            onClick={async () => {
+              setLoading(true);
+              try {
+                // SIMPLIFIED: Google sign-in with direct redirect
+                await signIn("google", {
+                  callbackUrl: "/Allcourse", // Direct to Allcourse
+                });
+                // No need to check status - NextAuth handles redirect
+              } catch (error) {
+                console.error("Google sign-in error:", error);
+                setError("Google sign-in failed. Please try again.");
+                setLoading(false);
+              }
             }}
+            disabled={loading}
           >
             <img src="/google.svg" alt="Google icon" className="w-5 h-5" />
             <span className="text-sm font-medium text-heading">
               Sign In With Google
             </span>
           </button>
-
           <p className="text-center text-sm text-muted-foreground pt-2">
-            Don’t have an account?{" "}
+            Don't have an account?{" "}
             <Link href="/signup" className="text-primary hover:underline">
               Sign Up
             </Link>

@@ -116,17 +116,15 @@ export async function POST(request) {
       );
     }
 
-    const adminEmails = [
-      "jackright198765@gmail.com",
-      "darlingtonboateng18@gmail.com",
-    ];
-    const isAdmin = adminEmails.includes(email.toLowerCase());
+    // 5. REMOVED: Hardcoded admin email check
+    // ALL new signups are now STUDENT by default
+    // Admin roles are assigned ONLY through invite system
 
-    // 5. Generate unique slug from name
+    // 6. Generate unique slug from name
     const baseSlug = createSlug(name);
     const uniqueSlug = await generateUniqueSlug(baseSlug, prisma);
 
-    // 6. Create account
+    // 7. Create account (ALWAYS as STUDENT)
     const hashedPassword = await bcrypt.hash(password, 12);
     const verificationToken = uuidv4();
     const tokenExpires = addHours(new Date(), 2);
@@ -136,11 +134,12 @@ export async function POST(request) {
         name: name,
         email: email.toLowerCase(),
         password: hashedPassword,
-        slug: uniqueSlug, // Add the generated slug
-        emailVerified: null,
-        role: isAdmin ? "ADMIN" : "STUDENT",
+        slug: uniqueSlug,
+        emailVerified: false,
+        role: "STUDENT", // <-- ALL new users are STUDENTS
+        // REMOVED: hasCompletedQuestionnaire field
       },
-      select: { id: true, email: true, slug: true },
+      select: { id: true, email: true, slug: true, role: true },
     });
 
     await prisma.verificationToken.create({

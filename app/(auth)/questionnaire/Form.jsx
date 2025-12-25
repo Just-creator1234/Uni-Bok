@@ -1,16 +1,13 @@
 // app/questionnaire/Form.js
 "use client";
 
-import { useState } from "react";
-import { updateUser } from "@/app/actions/updateUser";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { useSession } from "next-auth/react";
 
-export default function Questionnaire({ userId }) {
+export default function Questionnaire() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { data: session, status } = useSession();
 
   const [form, setForm] = useState({
     level: "",
@@ -31,20 +28,32 @@ export default function Questionnaire({ userId }) {
     e.preventDefault();
     setIsSubmitting(true);
 
-    const data = new FormData();
-    data.append("level", form.level);
-    data.append("semester", form.semester);
-    data.append("indexNo", form.indexNo);
-    data.append("hasRegistered", form.hasRegistered ? "true" : "false");
-
     try {
-      await updateUser(data, session.user.id);
-      // Redirect to Allcourse after successful submission
-      router.push("/Allcourse");
+      // Submit to questionnaire API endpoint
+      const res = await fetch("/api/user/questionnaire", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          level: form.level,
+          semester: form.semester,
+          indexNo: form.indexNo,
+          hasRegistered: form.hasRegistered,
+        }),
+      });
+
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || "Failed to submit questionnaire");
+      } else {
+        router.push("/Allcourse");
+      }
+
+      // Fallback redirect
     } catch (error) {
-      console.error("Error updating user:", error);
+      console.error("Questionnaire submission error:", error);
       alert(
-        "There was an error completing your registration. Please try again."
+        error.message ||
+          "There was an error completing your registration. Please try again."
       );
     } finally {
       setIsSubmitting(false);
