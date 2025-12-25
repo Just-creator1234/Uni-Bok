@@ -332,6 +332,14 @@ export async function POST(request) {
       await sendVerificationEmail(user.email, verificationToken);
     } catch (emailError) {
       console.error("Email sending failed:", emailError);
+      return NextResponse.json(
+        {
+          error: "Email sending error ",
+          code: "Failure to send email",
+          step: errorStep,
+        },
+        { status: 409 }
+      );
       // Continue even if email fails - user can request resend
     }
 
