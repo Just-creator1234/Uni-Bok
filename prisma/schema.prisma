@@ -37,6 +37,9 @@ model User {
   likedPosts                Post[]               @relation("PostLikes")
   courses                   Course[]             @relation("UserCourses")
     sentAdminInvites          AdminInvite[]        @relation("AdminInviteSentBy")
+      isDeleted     Boolean   @default(false)
+  deletedAt     DateTime?
+  deleteReason  String?   // Optional: Why was user deleted?
 }
 
 model Course {
