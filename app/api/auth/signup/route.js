@@ -116,9 +116,7 @@ export async function POST(request) {
       );
     }
 
-    // 5. REMOVED: Hardcoded admin email check
-    // ALL new signups are now STUDENT by default
-    // Admin roles are assigned ONLY through invite system
+    
 
     // 6. Generate unique slug from name
     const baseSlug = createSlug(name);
