@@ -7,7 +7,6 @@ import { TypingEffect } from "../TypingEffect";
 import Featurelist from "../Featurelist";
 import { CheckCircle, Mail } from "lucide-react";
 import { signIn } from "next-auth/react";
-import { da } from "@faker-js/faker";
 
 export default function SignUpPage() {
   const [name, setName] = useState("");
@@ -19,7 +18,6 @@ export default function SignUpPage() {
   const [googleLoading, setGoogleLoading] = useState(false);
   const [hasMounted, setHasMounted] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const [errorStep, setErrorStep] = useState("");
 
   useEffect(() => {
     setHasMounted(true);
@@ -37,18 +35,7 @@ export default function SignUpPage() {
       });
 
       const data = await res.json();
-
-      console.log(data, "jhhhhhh");
-      if (!res.ok) {
-        const errorMessage = data.error || "Account Creation Failed";
-        setError(errorMessage);
-        // Store step separately
-        if (data.step) {
-          setErrorStep(`Error occurred during: ${data.step}`);
-        }
-        setIsSuccess(false);
-        return; // Don't throw, just return
-      }
+      if (!res.ok) throw new Error(data?.error || "Account Creation Failed");
       setVerified(data.message);
       setIsSuccess(true);
     } catch (err) {
@@ -122,15 +109,11 @@ export default function SignUpPage() {
                     Join Uni-bok to access all materials
                   </p>
                 </div>
+
                 {error && (
-                  <div className="p-3 bg-red-50 border border-red-200 rounded-md mt-4 space-y-2">
-                    <p className="text-sm text-red-700 font-medium">{error}</p>
-                    {errorStep && (
-                      <p className="text-xs text-red-600 font-mono">
-                        {errorStep}
-                      </p>
-                    )}
-                  </div>
+                  <p className="p-2 bg-red-100 text-sm text-red-700 text-center rounded-md mt-4">
+                    {error}
+                  </p>
                 )}
                 {verified && (
                   <p className="p-2 bg-yellow-100 text-sm text-yellow-700 text-center rounded-md mt-4">
